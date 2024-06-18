@@ -10,7 +10,7 @@ let currentPlayerHealth = chosenMaxLife; //(7) 플레이어 체력 변수 선언
 
 adjustHealthBars(chosenMaxLife); //(3)게임을 로드할때마다 화면을 업데이트하게 함
 
-//(31)
+//(31)endRound함수 선언 - 상황에 상관없이 게임이 끝나면 함수가 선언되도록 만든다.
 function endRound() {
     const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE); 
     currentPlayerHealth -= playerDamage; 
@@ -35,8 +35,7 @@ function attackMonster(mode){//(20)코드 중복을 제거하기 위한 함수 �
     //(26) 원래 만들어둔 dealMonsterDamage 함수를 들고와서 ATTACK_VALUE를 MaxDamage로 바꿔준다.
     const damage = dealMonsterDamage(maxDamage);
     currentMonsterHealth -= damage;
-//(32)endround함수 만든걸 입력하기
-    endRound();
+    endRound(); //(32)endround함수 만든걸 입력하기
 
     //아래는 모두 endRound 함수 내부로 옮겼음
     // const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE); 
@@ -62,13 +61,15 @@ function strongAttackHandler(){
 function healPlayerHandler() {
     let healValue; //(34)if조건문을 만들어 현재체력이 chosenMaxLife보다 크거나 같은지 확인할것임
     if(currentPlayerHealth >= chosenMaxLife - HEAL_VALUE) { //(35)초기 체력보다 플레이어의 체력이 더 높아지지 않도록 하는 조건
-        alert("You can't heal to more than your max initial health.") //(36)
+        alert("You can't heal to more than your max initial health.") //(36)경고 문구 입력
         healValue = chosenMaxLife - currentMonsterHealth; // (37)맥스에서 현재 체력을 뺀 값을 반환시켜 최대치보다 더 충전시켜 주지 않겠다는 단호한 의지를 밝힘
     }
     else {
-        healValue = HEAL_VALUE;//(38)아니라면 전역함수 heal_value만큼 체력 보충해줘라
+        healValue = HEAL_VALUE;//(38)조건이 만족되지 않는다면 전역함수 heal_value만큼 체력 보충해줘라
     }
-    increasePlayerHealth(HEAL_VALUE);
+    // increasePlayerHealth(HEAL_VALUE);
+    increasePlayerHealth(healValue); //(39)최대체력과 현재 체력을 반영하는 동적값이므로 HEAL_VALUE에서 healValue로 변경해준다.
+
     
     currentPlayerHealth+= HEAL_VALUE;//(34)현재 플레이어 체력에 추가되도록 적용
     endRound(); //(33) endRound 함수에 다시 만든걸 재활용
